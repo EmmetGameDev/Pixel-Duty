@@ -13,6 +13,7 @@ public class EnemyMelee : MonoBehaviour
     private float distance;
     public float speed;
 
+    [Header("Attacking")];
     private bool isAttacking = false;
     public Animator knifeAnim;
     public float attackCD;
@@ -21,9 +22,16 @@ public class EnemyMelee : MonoBehaviour
     public float attackRange;
     public LayerMask playerLayer;
 
+    [Header("Health")];
+    public int maxHealth;
+    private float currentHealth;
+    public float armor;
+    public AudioSource hitAudioSrc;
+
     private void Start()
     {
         playerTrans = GameObject.Find("Player").transform;
+        currentHealth = maxHealth;
     }
 
     private void Update()
@@ -73,6 +81,27 @@ public class EnemyMelee : MonoBehaviour
         {
             myAnim.SetBool("IsWalkingRight", false);
         }
+    }
+
+    public void HealthDown(int ammount){
+        float damage = ammount - (armor * 0.1f);
+        //TODO Display the damage
+        currentHealth -= damage;
+        hitAudioSrc.Play();
+        if(currentHealth <= 0){
+            Death();
+        }
+    }
+
+    public void Death(){
+        StartCoroutine(DeathAnim());
+    }
+
+    //TODO enter animation duration!!!
+    IEnumerator DeathAnim(){
+        myAnim.SetTrigger("Death");
+        yield return new WaitForSeconds(1f);
+        Destroy(myTrans.gameObject);
     }
 
     public void SlashAttack()
