@@ -31,6 +31,8 @@ public class Health : MonoBehaviour
     public bool isPlating = false;
     public Sprite[] plateUISprites;
     private int plateBeingLoaded;
+    public GameObject playerMain;
+    private float initialSpeed;
 
     private void Start()
     {
@@ -98,7 +100,8 @@ public class Health : MonoBehaviour
             {
                 currentHealth++;
                 //TODO Make it use up one plate from interaction script
-                //TODO unslow, show gun
+                playerMain.GetComponent<Movement>().speed = initialSpeed;
+                playerMain.GetComponent<Movement>().weaponTrans.gameObject.GetComponent<SpriteRenderer>().enabled = true;
                 isPlating = false;
                 UpdateHealthVisual();
             }
@@ -113,14 +116,17 @@ public class Health : MonoBehaviour
         {
             plateBeingLoaded = currentHealth;
         }
-        //TODO Make gun hidden, and slow movement
+        initialSpeed = playerMain.GetComponent<Movement>().speed;
+        playerMain.GetComponent<Movement>().speed = initialSpeed - platingSlow;
+        playerMain.GetComponent<Movement>().weaponTrans.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+
     }
 
     IEnumerator PlatingAnimUI()
     {
-        if(isPlating == true)
+        for (int i = 0; i < 14; i++)
         {
-            for (int i = 0; i < 14; i++)
+            if(isPlating == true)
             {
                 if (plateBeingLoaded == 2)
                 {
@@ -130,20 +136,19 @@ public class Health : MonoBehaviour
                 {
                     plate1.sprite = plateUISprites[i];
                 }
-                yield return new WaitForSeconds(platingDur / 14);
             }
-        }
-        else
-        {
-            if(plateBeingLoaded == 2)
+            else
             {
-                plate2.sprite = plateUISprites[0];
+                if(plateBeingLoaded == 2)
+                {
+                    plate2.sprite = plateUISprites[0];
+                }
+                if (plateBeingLoaded == 1)
+                {
+                    plate1.sprite = plateUISprites[0];
+                }
             }
-            if (plateBeingLoaded == 1)
-            {
-                plate1.sprite = plateUISprites[0];
-            }
+            yield return new WaitForSeconds(platingDur / 14);
         }
-        
     }
 }

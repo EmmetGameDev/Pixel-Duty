@@ -26,6 +26,8 @@ public class Shooting : MonoBehaviour
     public AudioSource shootSFX;
     public Sprite[] reloadSprites;
 
+    public GameObject mainPlayer;
+
     public Sprite spIdle;
     public Sprite spShoot;
 
@@ -108,6 +110,7 @@ public class Shooting : MonoBehaviour
 
     public void Shoot()
     {
+        mainPlayer.GetComponent<Health>().isPlating = false;
         shootSFX.Play();
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
