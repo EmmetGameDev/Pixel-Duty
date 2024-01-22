@@ -90,7 +90,7 @@ public class Health : MonoBehaviour
     //Handling Plating up
     private void Update()
     {
-        if (Input.GetKeyDown(plateupKey) && isPlating == false && currentHealth != maxHealth)
+        if (Input.GetKeyDown(plateupKey) && isPlating == false && currentHealth != maxHealth && playerMain.GetComponent<InteractionSystem>().BodyArmor > 0)
         {
             PlateUp();
         }
@@ -99,7 +99,7 @@ public class Health : MonoBehaviour
             if (timer >= platingDur)
             {
                 currentHealth++;
-                //TODO Make it use up one plate from interaction script
+                playerMain.GetComponent<InteractionSystem>().BodyArmor -= 1;
                 playerMain.GetComponent<Movement>().speed = initialSpeed;
                 playerMain.GetComponent<Movement>().weaponTrans.gameObject.GetComponent<SpriteRenderer>().enabled = true;
                 isPlating = false;
