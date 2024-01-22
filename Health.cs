@@ -19,6 +19,16 @@ public class Health : MonoBehaviour{
     public Image plate2;
     public Image healthBar;
 
+    //Plating
+    public KeyCode plateupKey;
+    public GameObject plateupIndicator;
+    public GameObject uiPlateAnim;
+    public float platingDur;
+    public float platingSlow;
+    private float timer;
+    public bool isPlating;
+    //TODO add reference to move script
+
     private void Start(){
         maxHealth = maxPlates + 1;
     }
@@ -59,5 +69,23 @@ public class Health : MonoBehaviour{
         yield return new WaitForSeconds(duration);
         playerAnim.SetBool("Hit", false);
         isInvinc = false;
+    }
+
+    //Handling Plating up
+    private void Update(){
+        if(isPlating == true){
+            if(timer >= platingDur){
+                currentHealth++;
+                //TODO Make it use up one plate from interaction script
+                //TODO unslow, show gun
+                isPlating = false;
+            }
+            timer += Time.deltaTime;
+        }
+    }
+
+    public void PlateUp(){
+        isPlating = true;
+        //TODO Make gun hidden, and slow movement
     }
 }
