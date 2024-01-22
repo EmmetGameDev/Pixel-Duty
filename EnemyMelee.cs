@@ -17,6 +17,10 @@ public class EnemyMelee : MonoBehaviour
     public Animator knifeAnim;
     public float attackCD;
 
+    public Transform attackpoint;
+    public float attackRange;
+    public LayerMask playerLayer;
+
     private void Start()
     {
         playerTrans = GameObject.Find("Player").transform;
@@ -73,8 +77,10 @@ public class EnemyMelee : MonoBehaviour
 
     public void SlashAttack()
     {
-        //TODO make attak deal damage
-
+        Collider2D hitPlayer = Physics2D.OverlapCircleAll(attackpoint.position, attackRange, playerLayer);
+        if(hitPlayer != null && hitPlayer.GameObject.name == "Player"){
+            hitPlayer.GameObject.GetComponent<Health>().HealthDown(1);
+        }
         //Animation
         StartCoroutine(SlashAnim());
     }
