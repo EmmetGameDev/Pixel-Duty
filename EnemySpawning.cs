@@ -15,8 +15,22 @@ public class EnemySpawning : MonoBehaviour
 
     public void StartWaveGen2(){
         int usedDiff = difficulty;
-        for(i = 0; i < usedDiff; i += )
+        for(i = usedDiff; i > 0)
     }
+
+    //Every enemy in the Enemies[] array has an index.
+    //Place them into the array from least dangerous(1) to most (n)
+    //Every wave spawn, make the waveCode<List> have the full code of the wave,
+    //only then handle spawning.
+    //
+    //Wave writing script:
+    //Check maximum enemy difficulty we can spawn
+    //If we can spawn, check a 50% chance randomizer, if we should spawn.
+    //Then substract the enemy value from usedDifficulty
+    //Go to another enemy value (for loop)
+    //
+    //If at the end we didnt use all difficulty, run loop again.
+    //waveCode list should be ready.
 
 
     public void StartWave(){
