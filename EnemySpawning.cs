@@ -15,7 +15,14 @@ public class EnemySpawning : MonoBehaviour
 
     public void StartWaveGen2(){
         int usedDiff = difficulty;
-        for(i = usedDiff; i > 0)
+        for(i = usedDifficulty; i > 0; i -= usedDifficulty){
+            int currentChecked = difficulty / i;
+            if(usedDifficulty > currentChecked && Random.Range(1,3) == 2){
+                waveCode.Add(currentChecked);
+            }else{
+                i += usedDifficulty;
+            }
+        }
     }
 
     //Every enemy in the Enemies[] array has an index.
@@ -31,7 +38,6 @@ public class EnemySpawning : MonoBehaviour
     //
     //If at the end we didnt use all difficulty, run loop again.
     //waveCode list should be ready.
-
 
     public void StartWave(){
         int usedDifficulty;
