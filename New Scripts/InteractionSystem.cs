@@ -21,6 +21,8 @@ public class InteractionSystem : MonoBehaviour
         }
     }
 
+    
+
     public void PickupAnimation(GameObject obj)
     {
         obj.GetComponent<AudioSource>().Play();
