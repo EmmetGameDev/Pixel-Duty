@@ -4,7 +4,15 @@ using UnityEngine;
 
 public class InteractionSystem : MonoBehaviour
 {
+    [Header("General Scripts")]
+    public Movement moveScr;
+
+    [Header("Body Armor")]
     public int BodyArmor;
+
+    [Header("Coffee")]
+    public int Coffee;
+    public float additMS = 0.25f;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -12,16 +20,19 @@ public class InteractionSystem : MonoBehaviour
         {
             switch (collision.gameObject.name)
             {
+                //Here handle all items
+
                 case "BodyArmor":
                     BodyArmor++;
-                    PickupAnimation(collision.gameObject);
                     break;
-
+                case "Coffee":
+                    Coffee++;
+                    moveScr.speed += additMS;
+                    break;
+                PickupAnimation(collision.gameObject);
             }
         }
     }
-
-    
 
     public void PickupAnimation(GameObject obj)
     {
