@@ -13,7 +13,7 @@ public class EnemyShooting : MonoBehaviour
     private float distance;
     public float speed;
 
-    [Header("Attacking")];
+    [Header("Attacking")]
     private bool isAttacking = false;
     public float timer;
     private float currentInterval;
@@ -26,21 +26,24 @@ public class EnemyShooting : MonoBehaviour
 
     public AudioSource shootSFX;
     public float accuracy;
-    public GameObject firePoint;
-    public float bulletForce
+    public Transform firePoint;
+    public float bulletForce;
     public GameObject bulletPrefab;
-    public GameObject gunAnim;
+    public Animator gunAnim;
+    public float attackCD;
+    public float angleSmoothing;
 
-    [Header("Health")];
+    [Header("Health")]
     public int maxHealth;
-    private float currentHealth;
+    public float currentHealth;
     public float armor;
     public AudioSource hitAudioSrc;
+    public AudioSource deathSrc;
+    public float deathDuration;
 
     private void Start()
     {
         playerTrans = GameObject.Find("Player").transform;
-        myAnim.SetBool("IsMoving", true);
         currentHealth = maxHealth;
         currentInterval = Random.Range(attackMinInterval, attackMaxInterval);
     }
@@ -53,7 +56,8 @@ public class EnemyShooting : MonoBehaviour
             Vector3 aimDir = (playerTrans.position - weaponTrans.position).normalized;
             float angle = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg;
             angle += 180f;
-            weaponTrans.eulerAngles = new Vector3(0, 0, angle);
+            float smoothAngle = Mathf.SmoothDampAngle(transform.eulerAngles.z, angle, ref angleSmoothing, 0.1f);
+            weaponTrans.eulerAngles = new Vector3(0, 0, smoothAngle);
 
             Vector2 scale = weaponTrans.localScale;
             if (playerTrans.position.x > weaponTrans.position.x)
@@ -117,7 +121,9 @@ public class EnemyShooting : MonoBehaviour
     //TODO enter animation duration!!!
     IEnumerator DeathAnim(){
         myAnim.SetTrigger("Death");
-        yield return new WaitForSeconds(1f);
+        gunAnim.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        deathSrc.Play();
+        yield return new WaitForSeconds(deathDuration);
         Destroy(myTrans.gameObject);
     }
 

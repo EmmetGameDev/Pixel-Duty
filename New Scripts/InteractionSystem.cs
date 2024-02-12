@@ -16,7 +16,7 @@ public class InteractionSystem : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.tag == "Item")
+        if (collision.gameObject.tag == "Item")
         {
             switch (collision.gameObject.name)
             {
@@ -29,8 +29,8 @@ public class InteractionSystem : MonoBehaviour
                     Coffee++;
                     moveScr.speed += additMS;
                     break;
-                PickupAnimation(collision.gameObject);
             }
+            PickupAnimation(collision.gameObject);
         }
     }
 

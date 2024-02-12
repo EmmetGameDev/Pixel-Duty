@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,26 +15,34 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(!isEnemy){
-            if (collision.gameObject.tag.Equals("Enemy")){
+        if (!isEnemy)
+        {
+            if (collision.gameObject.tag.Equals("Enemy"))
+            {
                 EnemyMelee scr = collision.gameObject.GetComponentInChildren<EnemyMelee>();
-                if(scr != null){
+                if (scr != null)
+                {
                     scr.HealthDown(damage);
                 }
                 else
                 {
                     //Made for handling other enemy types
                     EnemyShooting scr2 = collision.gameObject.GetComponentInChildren<EnemyShooting>();
-                    if(scr2){
+                    if (scr2)
+                    {
                         scr2.HealthDown(damage);
                     }
                 }
                 Instantiate(HitMarker, transform.position, Quaternion.identity);
             }
-        }else{
-            if(collision.gameObject.tag.Equals("Player")){
+        }
+        else
+        {
+            if (collision.gameObject.tag.Equals("Player"))
+            {
                 Health scr = collision.gameObject.GetComponentInChildren<Health>();
-                if(scr){
+                if (scr)
+                {
                     scr.HealthDown(1);
                 }
             }

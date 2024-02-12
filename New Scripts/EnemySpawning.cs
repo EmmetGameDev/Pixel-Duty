@@ -13,15 +13,34 @@ public class EnemySpawning : MonoBehaviour
 
     public List<int> waveCode = new List<int>();
 
-    public void StartWaveGen2(){
+    private void Start()
+    {
+        StartWaveGen3();
+    }
+
+    public void StartWaveGen3()
+    {
         int usedDiff = difficulty;
-        for(i = usedDifficulty; i > 0; i -= usedDifficulty){
-            int currentChecked = difficulty / i;
-            if(usedDifficulty > currentChecked && Random.Range(1,3) == 2){
-                waveCode.Add(currentChecked);
-            }else{
-                i += usedDifficulty;
+        while(usedDiff > 0)
+        {
+            for (int i = usedDiff; i >= 0; i--)
+            {
+                if (usedDiff >= i)
+                {
+                    if (Random.Range(1, 15) == 2)
+                    {
+                        waveCode.Add(i);
+                        usedDiff -= i;
+                    }
+                }
             }
+        }
+        Debug.Log("Start Difficulty: " + difficulty.ToString());
+        Debug.Log("Used Difficulty: " + usedDiff.ToString());
+
+        foreach (int item in waveCode)
+        {
+            Debug.Log(item);
         }
     }
 
@@ -39,7 +58,7 @@ public class EnemySpawning : MonoBehaviour
     //If at the end we didnt use all difficulty, run loop again.
     //waveCode list should be ready.
 
-    public void StartWave(){
+    /* public void StartWave(){
         int usedDifficulty;
         //Here manage whole wave stats
         for(i = difficulty; i > 0; i -= ){
@@ -50,10 +69,11 @@ public class EnemySpawning : MonoBehaviour
                 
             }
         }
-    }
+    } */
 
     IEnumerator SendWave(){
         //Here wait in beetween enemy spawns
+        yield return new WaitForSeconds(1f);
     }
 
     public void SpawnEnemy(string enemyType, Vector3 spawnPosition){

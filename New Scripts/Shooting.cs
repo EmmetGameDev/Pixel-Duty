@@ -25,8 +25,8 @@ public class Shooting : MonoBehaviour
     public AudioSource reloadSFX;
     public AudioSource shootSFX;
     public Sprite[] reloadSprites;
-
-    public GameObject mainPlayer;
+    public GameObject playermain;
+    private Health health;
 
     public Sprite spIdle;
     public Sprite spShoot;
@@ -34,11 +34,12 @@ public class Shooting : MonoBehaviour
     private void Start()
     {
         curBullets = maxBullets;
+        health = playermain.GetComponent<Health>();
     }
 
     private void Update()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") && health.isPlating == false)
         {
             if (curBullets > 0)
             {
@@ -110,7 +111,6 @@ public class Shooting : MonoBehaviour
 
     public void Shoot()
     {
-        mainPlayer.GetComponent<Health>().isPlating = false;
         shootSFX.Play();
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();

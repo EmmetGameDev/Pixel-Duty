@@ -24,7 +24,8 @@ public class Health : MonoBehaviour
     [Header("Plating")]
     public KeyCode plateupKey;
     public GameObject plateupIndicator;
-    public GameObject uiPlateAnim;
+    public Animator uiPlateAnim1;
+    public Animator uiPlateAnim2;
     public float platingDur;
     public float platingSlow;
     private float timer;
@@ -33,10 +34,12 @@ public class Health : MonoBehaviour
     private int plateBeingLoaded;
     public GameObject playerMain;
     private float initialSpeed;
+    private InteractionSystem interaction;
 
     private void Start()
     {
         maxHealth = maxPlates + 1;
+        interaction = playerMain.GetComponent<InteractionSystem>();
         currentHealth = maxHealth;
     }
 
@@ -90,7 +93,7 @@ public class Health : MonoBehaviour
     //Handling Plating up
     private void Update()
     {
-        if (Input.GetKeyDown(plateupKey) && isPlating == false && currentHealth != maxHealth && playerMain.GetComponent<InteractionSystem>().BodyArmor > 0)
+        if (Input.GetKeyDown(plateupKey) && isPlating == false && currentHealth != maxHealth && interaction.BodyArmor > 0)
         {
             PlateUp();
         }
@@ -101,9 +104,18 @@ public class Health : MonoBehaviour
                 currentHealth++;
                 playerMain.GetComponent<InteractionSystem>().BodyArmor -= 1;
                 playerMain.GetComponent<Movement>().speed = initialSpeed;
-                playerMain.GetComponent<Movement>().weaponTrans.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+                playerMain.GetComponent<Movement>().weaponTrans.gameObject.GetComponentInChildren<SpriteRenderer>().enabled = true;
                 isPlating = false;
+                if(plateBeingLoaded == 1)
+                {
+                    uiPlateAnim1.enabled = true;
+                }
+                else
+                {
+                    uiPlateAnim2.enabled = true;
+                }
                 UpdateHealthVisual();
+                timer = 0f;
             }
             timer += Time.deltaTime;
         }
@@ -112,22 +124,34 @@ public class Health : MonoBehaviour
     public void PlateUp()
     {
         isPlating = true;
-        if(currentHealth < 3)
+        if (currentHealth < 3)
         {
             plateBeingLoaded = currentHealth;
         }
         initialSpeed = playerMain.GetComponent<Movement>().speed;
         playerMain.GetComponent<Movement>().speed = initialSpeed - platingSlow;
-        playerMain.GetComponent<Movement>().weaponTrans.gameObject.GetComponent<SpriteRenderer>().enabled = false;
-
+        playerMain.GetComponent<Movement>().weaponTrans.gameObject.GetComponentInChildren<SpriteRenderer>().enabled = false;
+        StartCoroutine(PlatingAnimUI());
     }
 
     IEnumerator PlatingAnimUI()
     {
+        if (plateBeingLoaded == 2)
+        {
+            uiPlateAnim2.enabled = false;
+            plate2.color = new Color(255,255,255,255);
+        }
+        if (plateBeingLoaded == 1)
+        {
+            uiPlateAnim1.enabled = false;
+            plate2.color = new Color(255, 255, 255, 255);
+
+        }
         for (int i = 0; i < 14; i++)
         {
-            if(isPlating == true)
+            if (isPlating == true)
             {
+                
                 if (plateBeingLoaded == 2)
                 {
                     plate2.sprite = plateUISprites[i];
@@ -135,11 +159,12 @@ public class Health : MonoBehaviour
                 if (plateBeingLoaded == 1)
                 {
                     plate1.sprite = plateUISprites[i];
+                    
                 }
             }
             else
             {
-                if(plateBeingLoaded == 2)
+                if (plateBeingLoaded == 2)
                 {
                     plate2.sprite = plateUISprites[0];
                 }
